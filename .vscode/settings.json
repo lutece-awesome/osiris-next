@@ -1,4 +1,10 @@
 {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "xaver.clang-format"
+    "editor.defaultFormatter": "xaver.clang-format",
+    "protoc": {
+        "compile_on_save": false,
+        "options": [
+            "--proto_path=${workspaceRoot}/proto",
+        ]
+    }
 }

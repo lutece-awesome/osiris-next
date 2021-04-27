@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+option go_package = "github.com/lutece-awesome/osiris-next/proto";
+
+enum LANGUAGE {
+  C = 0;
+  CC = 1;
+  CLANG = 2;
+  PYTHON = 3;
+  TYPESCRIPT = 4;
+  GOLANG = 5;
+}
+
+// Codeforces testlib checker.
+enum TestlibChecker {
+  /**
+   * Compare two doubles with maximal absolute error of 1.5E-6.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/acmp.cpp
+   */
+  ACMP = 0;
+  /**
+   * Checker to compare output and answer in the form:
+   *
+   * Case 1: <number>
+   * Case 2: <number>
+   * ...
+   * Case n: <number>
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/caseicmp.cpp
+   */
+  CASEICMP = 1;
+  /**
+   * Checker to compare output and answer in the form:
+   *
+   * Case 1: <number> <number> <number> ... <number>
+   * Case 2: <number> <number> <number> ... <number>
+   * ...
+   * Case n: <number> <number> <number> ... <number>
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/casencmp.cpp
+   */
+  CASENCMP = 2;
+  /**
+   * Checker to compare output and answer in the form:
+   *
+   * Case 1: <token> <token> ... <token>
+   * Case 2: <token> <token> ... <token>
+   * ...
+   * Case n: <token> <token> ... <token>
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/casewcmp.cpp
+   */
+  CASEWCMP = 3;
+  /**
+   * Compare two doubles with maximal absolute error of 1E-6.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/dcmp.cpp
+   */
+  DCMP = 4;
+  /**
+   * compare files as sequence of lines.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/fcmp.cpp
+   */
+  FCMP = 5;
+  /**
+   * compare two signed huge integers.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/hcmp.cpp
+   */
+  HCMP = 6;
+  /**
+   * compare two signed int32's.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/icmp.cpp
+   */
+  ICMP = 7;
+  /**
+   * compare files as sequence of tokens in lines.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/lcmp.cpp
+   */
+  LCMP = 8;
+  /**
+   * compare ordered sequences of signed int64 numbers.
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/ncmp.cpp
+   */
+  NCMP = 9;
+  /**
+   * multiple " + YES + "/" + NO + " (case insensetive)
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/nyesno.cpp
+   */
+  NYESNO = 10;
+  /**
+   * compare two sequences of doubles, max absolute or relative error 1E-4
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/rcmp4.cpp
+   */
+  RCMP4 = 11;
+  /**
+   * compare two sequences of doubles, max absolute or relative error 1E-6
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/rcmp6.cpp
+   */
+  RCMP6 = 12;
+  /**
+   * compare two sequences of doubles, max absolute or relative error 1E-9
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/rcmp9.cpp
+   */
+  RCMP9 = 13;
+  /**
+   * compare two sequences of doubles, maximal absolute error 1.5E-5
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/rncmp.cpp
+   */
+  RNCMP = 14;
+  /**
+   * compare unordered sequences of signed int64 numbers
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/uncmp.cpp
+   */
+  UNCMP = 15;
+  /**
+   * compare sequences of tokens
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/wcmp.cpp
+   */
+  WCMP = 16;
+  /**
+   * YES + " or " + NO + " (case insensetive)"
+   * https://github.com/MikeMirzayanov/testlib/blob/master/checkers/yesno.cpp
+   */
+  YESNO = 17;
+}
+
+// Use the HTTP GET method to retrieve test case.
+message NetworkResource {
+  string url = 1;
+  /* The resource identify key, used to cache the item. Will enforce retrieve if
+   * absent.
+   * This usually the MD5 of the file.
+   */
+  string identify_key = 2;
+}
+
+message TestCase {
+  oneof source {
+    NetworkResource network_resource = 1;
+    bytes content = 2;
+  }
+}
+
+message Program {
+  // Program language.
+  LANGUAGE language = 1;
+  // Program content.
+  string content = 2;
+}
+
+message Checker {
+  oneof source {
+    // With testlib checker.
+    TestlibChecker testlib_checker = 1;
+    // Customized chcekr.
+    Program customized_checker = 2;
+  }
+}
+
+message Restriction {
+  // Compile time restriction.
+  int64 compile_time_restriction_millisecond = 1;
+  // Runtime memory restriction.
+  int64 memory_restriction_kib = 2;
+  // Runtime cpu time restriction.
+  int64 cpu_time_restriction_millisecond = 3;
+  // Output limit restriction.
+  int64 output_restriction_kib = 4;
+  // Checker runtime memory restriction.
+  int64 checker_memory_restriction_kib = 5;
+  // Checker runtime cpu time restriction.
+  int64 checker_cpu_time_restriction_millisecond = 6;
+}

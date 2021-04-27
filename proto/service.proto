@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "data.proto";
+
+option go_package = "github.com/lutece-awesome/osiris-next/proto";
+
+service Osiris {
+  rpc RunProgram(RunProgramRequest) returns (stream RunProgramResponse) {}
+}
+
+message RunProgramRequest {
+  // Program.
+  Program program = 1;
+  // Test cases.
+  repeated TestCase test_cases = 2;
+  // Program checker.
+  Checker checker = 3;
+  // Restriction for program & checker.
+  Restriction restriction = 4;
+}
+
+message RunProgramResponse {}

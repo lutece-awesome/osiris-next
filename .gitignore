@@ -1,35 +1,21 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
 *.so
 *.dylib
-*.dll
 
-# Fortran module files
-*.mod
-*.smod
+# Test binary, built with `go test -c`
+*.test
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
+# Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-*.app
 
-# Generated code
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# generated files folder
 dist/
+
+# work folder
+work/
