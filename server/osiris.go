@@ -9,9 +9,9 @@ type OsirisServer struct {
 }
 
 func NewServer() *OsirisServer {
-	return &OsirisServer{};
+	return &OsirisServer{}
 }
 
 func (OsirisServer) RunProgram(request *pb.RunProgramRequest, stream pb.Osiris_RunProgramServer) error {
-	return nil;
+	return nil
 }
