@@ -122,12 +122,17 @@ enum TestlibChecker {
 
 // Use the HTTP GET method to retrieve test case.
 message NetworkResource {
+  // The url of the resource(file), the osiris will use HTTP GET method to fetch
+  // it.
   string url = 1;
-  /* The resource identify key, used to cache the item. Will enforce retrieve if
-   * absent.
-   * This usually the MD5 of the file.
+  /*
+   * md5sum of the file, the osiris will not cache the file if absent or not
+   * equal to the osiris calculated md5.
+   * The osiris will calculate the file's
+   * md5 via Golang's offical md5 package(https://golang.org/pkg/crypto/md5/),
+   * The client should keep consistent with this library.
    */
-  string identify_key = 2;
+  bytes md5_sum = 2;
 }
 
 message TestCase {

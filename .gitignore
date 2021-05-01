@@ -19,3 +19,6 @@ dist/
 
 # work folder
 work/
+
+# work folder for testing
+test/work_test/

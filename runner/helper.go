@@ -1,16 +1,16 @@
 package runner
 
 import (
-	"fmt"
-
 	constant "github.com/lutece-awesome/osiris-next/constant"
 	fm "github.com/lutece-awesome/osiris-next/file"
+	log "github.com/sirupsen/logrus"
 )
 
 var FileManager, err = fm.NewFileManager(*constant.Work)
 
-func init(){
-	if ( err != nil ){
-		panic( fmt.Sprintf("can not initialize the file manager with error %v" , err ))
+func init() {
+	if err != nil {
+		log.Error("Unexpected error happened while bootstrap the file manager")
+		panic(err)
 	}
 }
