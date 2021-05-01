@@ -14,23 +14,23 @@ import (
 type FileManager struct {
 	// mutex to guarantee safety access cacheMap among multiple goroutines.
 	lock sync.Mutex
-	// Md5 to downloadStatus mapping
-	cacheMap map[Md5Sum]*downloadStatus
+	// Sum256 to downloadStatus mapping
+	cacheMap map[Sum256]*downloadStatus
 	// Working directory to store the downloaded files.
 	workDir string
 	// Random number generator to generate the file name suffix.
 	random *rand.Rand
 }
 
-func (fm *FileManager) getDownloadStatusOrCreateAndSchedule(md5 Md5Sum, url string) *downloadStatus {
+func (fm *FileManager) getDownloadStatusOrCreateAndSchedule(sum256 Sum256, url string) *downloadStatus {
 	fm.lock.Lock()
 	defer fm.lock.Unlock()
 	var ds *downloadStatus
-	if ret, ok := fm.cacheMap[md5]; ok && ret.Err == nil {
+	if ret, ok := fm.cacheMap[sum256]; ok && ret.Err == nil {
 		ds = ret
 	} else {
 		ds = newDownloadStatus(fm.generateFileName())
-		fm.cacheMap[md5] = ds
+		fm.cacheMap[sum256] = ds
 		ds.scheduleDownload(url)
 	}
 	return ds
@@ -47,7 +47,7 @@ func NewFileManager(workDir string) (*FileManager, error) {
 		return nil, err
 	}
 	fm := FileManager{
-		cacheMap: make(map[Md5Sum]*downloadStatus),
+		cacheMap: make(map[Sum256]*downloadStatus),
 		workDir:  workDir,
 		random:   rand.New(rand.NewSource(time.Now().Unix())),
 	}
@@ -55,11 +55,11 @@ func NewFileManager(workDir string) (*FileManager, error) {
 	for _, file := range fileInfo {
 		if !file.IsDir() {
 			ds := newDownloadStatus(path.Join(workDir, file.Name())).markAsDone()
-			md5, err := ds.FileMixin.getMd5()
+			sum256, err := ds.FileMixin.getSum256()
 			if err != nil {
 				return nil, err
 			}
-			fm.cacheMap[md5] = ds
+			fm.cacheMap[sum256] = ds
 		}
 	}
 	log.Info(fmt.Sprintf("%d cached file loaded", len(fileInfo)))

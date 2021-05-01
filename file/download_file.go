@@ -1,9 +1,9 @@
 package file
 
-func (fm *FileManager) DownloadFile(url string, md5 Md5Sum) *downloadStatus {
+func (fm *FileManager) DownloadFile(url string, sum256 Sum256) *downloadStatus {
 	var ds *downloadStatus
-	if len(md5) > 0 {
-		ds = fm.getDownloadStatusOrCreateAndSchedule(md5, url)
+	if len(sum256) > 0 {
+		ds = fm.getDownloadStatusOrCreateAndSchedule(sum256, url)
 	} else {
 		ds = newDownloadStatus(fm.generateFileName())
 		ds.scheduleDownload(url)

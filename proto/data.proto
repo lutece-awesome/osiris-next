@@ -126,13 +126,13 @@ message NetworkResource {
   // it.
   string url = 1;
   /*
-   * md5sum of the file, the osiris will not cache the file if absent or not
-   * equal to the osiris calculated md5.
-   * The osiris will calculate the file's
-   * md5 via Golang's offical md5 package(https://golang.org/pkg/crypto/md5/),
-   * The client should keep consistent with this library.
+   * sha256 sum of the file, the osiris will not cache the file if absent or not
+   * equal to the osiris calculated result.
+   * The osiris will calculate the file's sha256 via Golang's offical sha256
+   * package(https://golang.org/pkg/crypto/sha256/), The client should keep
+   * consistent with this library.
    */
-  bytes md5_sum = 2;
+  bytes sha256_sum = 2;
 }
 
 message TestCase {

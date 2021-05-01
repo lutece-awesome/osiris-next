@@ -15,8 +15,8 @@ func prepare() {
 	util.MakeDirectoryIfNotExists(testDir)
 }
 
-func scheduleDownloadTask(fm *fi.FileManager, url, md5 string, run chan<- error) {
-	ds := fm.DownloadFile(url, fi.Md5Sum(md5))
+func scheduleDownloadTask(fm *fi.FileManager, url, sum256 string, run chan<- error) {
+	ds := fm.DownloadFile(url, fi.Sum256(sum256))
 	<-ds.Done
 	run <- ds.Err
 }
@@ -33,7 +33,7 @@ func TestFileDownloadWithoutCache(t *testing.T) {
 	go scheduleDownloadTask(fm, "http://localhost:9877/static/case1/1.out", "", run)
 	go scheduleDownloadTask(fm, "http://localhost:9877/static/case1/2.out", "", run)
 	for count := 0; count < 4; count++ {
-		err := <- run
+		err := <-run
 		if err != nil {
 			t.Fatal(err)
 		}

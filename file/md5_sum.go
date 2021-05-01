@@ -1,12 +1,13 @@
 package file
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"io"
 	"os"
 )
 
-type Md5Sum string
+// SHA256 sum
+type Sum256 string
 
 type fileMixin struct {
 	// The file name will generated as {current_time_stamp}_{random uint64}
@@ -15,29 +16,29 @@ type fileMixin struct {
 	created bool
 }
 
-func getMd5FromIoReader(src io.Reader) (Md5Sum, error) {
-	h := md5.New()
+func getSum256FromIoReader(src io.Reader) (Sum256, error) {
+	h := sha256.New()
 	_, err := io.Copy(h, src)
 	if err != nil {
 		return "", err
 	}
-	return Md5Sum(h.Sum(nil)), nil
+	return Sum256(h.Sum(nil)), nil
 }
 
-func (fileMix *fileMixin) getMd5() (Md5Sum, error) {
+func (fileMix *fileMixin) getSum256() (Sum256, error) {
 	f, err := os.Open(fileMix.path)
 	if err != nil {
 		return "", err
 	}
-	md5Val, err := getMd5FromIoReader(f)
+	sum256, err := getSum256FromIoReader(f)
 	if err != nil {
 		return "", err
 	}
 	err = f.Close()
 	if err != nil {
-		return md5Val, err
+		return sum256, err
 	}
-	return md5Val, nil
+	return sum256, nil
 }
 
 func (fileMix *fileMixin) emptyFile() (*os.File, error) {
