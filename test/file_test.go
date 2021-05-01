@@ -33,6 +33,7 @@ func TestFileDownloadWithoutCache(t *testing.T) {
 	go scheduleDownloadTask(fm, "http://localhost:9877/static/case1/1.out", "", run)
 	go scheduleDownloadTask(fm, "http://localhost:9877/static/case1/2.out", "", run)
 	for count := 0; count < 4; count++ {
+		err := <- run
 		if err != nil {
 			t.Fatal(err)
 		}
