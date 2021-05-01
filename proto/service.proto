@@ -17,6 +17,10 @@ message RunProgramRequest {
   Checker checker = 3;
   // Restriction for program & checker.
   Restriction restriction = 4;
+  // Execution policy.
+  ExcutionPolicy excution_policy = 5;
+  // Exit policy.
+  ExitPolicy exit_policy = 6;
 }
 
 message RunProgramResponse {}

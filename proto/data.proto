@@ -137,16 +137,21 @@ message NetworkResource {
 
 message TestCase {
   oneof source {
+    // Give the test case as network resource.
     NetworkResource network_resource = 1;
-    bytes content = 2;
+    // Directly set the test case content.
+    bytes raw_content = 2;
   }
+  // Since the program running result is a stream response, so this field used
+  // for client to track every case, osiris will copy this field into response.
+  string external_id = 3;
 }
 
 message Program {
   // Program language.
   LANGUAGE language = 1;
   // Program content.
-  string content = 2;
+  string raw_content = 2;
 }
 
 message Checker {
@@ -171,4 +176,21 @@ message Restriction {
   int64 checker_memory_restriction_kib = 5;
   // Checker runtime cpu time restriction.
   int64 checker_cpu_time_restriction_millisecond = 6;
+}
+
+enum ExcutionPolicy {
+  // This will guarantee the sequential execution order of test cases.
+  SEQUENTIAL_EXECUTION = 0;
+  // This will not guarantee the execution order of test cases.
+  OUT_OF_ORDER_EXECUTION = 1;
+}
+
+// This is the program running exit policy, will only take effect on the test
+// cases judge, in other words, any exception thrown at like compile stage or
+// file download stage will still cause exit.
+enum ExitPolicy {
+  // Will exit when first test case broken.
+  EXIT_WHEN_FIRST_FAIL = 0;
+  // Enfore run every test case.
+  ENFORCE_RUN_ALL = 1;
 }
